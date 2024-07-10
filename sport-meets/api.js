@@ -6,7 +6,7 @@ const baseApi = axios.create({
 
 export function getAllEvents(queries) {
   const { params } = queries;
-  if (params.category === "select") {
+  if (params.category === "select" && params.location === "select") {
     return baseApi.get("/events").then(({ data }) => {
       return data.events;
     });
@@ -118,5 +118,17 @@ export function getEventMessages(event_id) {
   })
   .catch((err) => {
     console.log(err);
+  })
+}
+
+export function getEventLocations() {
+  return baseApi.get("/locations").then(({data}) => {
+    return data["Event_Locations"]
+  })
+}
+
+export function getEventCategories() {
+  return baseApi.get("/categories").then(({data}) => {
+    return data["Event_Categories"]
   })
 }

@@ -23,7 +23,6 @@ export default function CreateEventScreen() {
 
   const {user} = useContext(UserContext)
   const   { somethingChanged } =  useContext(UserContext)
-
   const   { setSomethingChanged } =  useContext(UserContext)
 
 
@@ -99,7 +98,9 @@ export default function CreateEventScreen() {
     setSpaces(lspaces)
   }
 
-  if(!user) {
+  console.log(user.username.length)
+
+  if(user.username.length === 0) {
     return (<View style={styles.container}>
       <Text style={styles.notloggedInLabel}>You must be registered/logged in to create an Event</Text>
     </View>)

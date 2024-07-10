@@ -1,40 +1,25 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { useState } from "react";
-import Dropdown from "../components/Dropdown";
+import CategoryDropdown from "../components/CategoryDropdown";
+import LocationDropdown from "../components/LocationDropdown";
 import SportCards from "../components/SportCards";
 import { Input } from "@rneui/themed";
 
 export default function HomeScreen({ navigation }) {
   const [category, setCategory] = useState("select");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("select");
 
   return (
     <ScrollView>
       <Text style={styles.headerText}>SportMeets</Text>
-      <Text
-        style={styles.search}
-        aria-label='Label for Username'
-        nativeID='labelUsername'>
-        Search a sport by location
-      </Text>
       <View style={styles.container}>
-        <Input
-          placeholder='Search By Location'
-          type='text'
-          id='input'
-          name='name'
-          aria-label='input'
-          aria-labelledby='labelUsername'
-          style={styles.input}
-          value={location}
-          onChangeText={setLocation}
-        />
-        <Dropdown category={category} setCategory={setCategory} />
+      <LocationDropdown location={location} setLocation={setLocation} />
+        <CategoryDropdown category={category} setCategory={setCategory} />
       </View>
 
       {/* <MapView style={styles.map} /> */}
 
-      <SportCards navigation={navigation} category={category} />
+      <SportCards navigation={navigation} location={location} category={category} />
     </ScrollView>
   );
 }

@@ -1,26 +1,40 @@
 import { Picker } from "@react-native-picker/picker";
 import { View, StyleSheet, Text } from "react-native";
+import { getEventLocations } from "../api";
+import { useEffect, useState } from "react";
 
-const Dropdown = ({ category, setCategory }) => {
+const LocationDropdown = ({ location, setLocation }) => {
+
+  const [serverLocations, setsServerLocations] = useState("")
+
+  useEffect(()=> {
+    getEventLocations().then((locations)=> {
+
+      const local = locations.map((location)=> {
+          return <Picker.Item key={location["event_location"]}label={location["event_location"]} value={location["event_location"]} />
+      })
+        setsServerLocations(local)
+    })
+  }, [])
+
   return (
     <View>
       <Text
         style={styles.search}
         aria-label='Label for Username'
         id='labelUsername'>
-        Choose a sport
+        Choose a Location
       </Text>
       <Picker
         style={styles.dropdown}
-        selectedValue={category}
+        selectedValue={location}
         onValueChange={(value) => {
-          setCategory(value);
+          setLocation(value);
         }}>
+          {}
+        
         <Picker.Item label='Select' value='select' />
-        <Picker.Item label='Football' value='football' />
-        <Picker.Item label='Basketball' value='basketball' />
-        <Picker.Item label='Hockey' value='hockey' />
-        <Picker.Item label='Golf' value='Golf' />
+        {serverLocations}
       </Picker>
     </View>
   );
@@ -49,4 +63,4 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 });
-export default Dropdown;
+export default LocationDropdown;

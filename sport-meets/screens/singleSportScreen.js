@@ -56,7 +56,7 @@ export default function SingleSportScreen({ navigation, route }) {
  
   if(isLoading) return <Text>We are adding you the event...</Text>
   
-  if (!user) {
+  if (user.username.length === 0) {
 
     return (
       <ScrollView>

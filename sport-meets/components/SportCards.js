@@ -44,20 +44,31 @@ const Item = ({ event, navigation }) => {
   );
 };
 
-export default function SportCards({ navigation, category }) {
+export default function SportCards({ navigation, category, location }) {
   const [events, setEvents] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
-    const queries = {
-      params: {
-        category: category,
-      },
-    };
-    getAllEvents(queries).then((events) => {
-      setEvents(events);
-    });
-  }, [category]));
+      console.log(category, location);
+  
+      let queries = { params: {} };
+      if (category !== "select") {
+        queries.params.category = category;
+      }
+  
+      if (location !== "select") {
+        queries.params.location = location;
+      }
+  
+      getAllEvents(queries)
+        .then((events) => {
+          setEvents(events);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch events:', error);
+        });
+    }, [category, location])
+  )
 
   return (
       <SafeAreaView>
