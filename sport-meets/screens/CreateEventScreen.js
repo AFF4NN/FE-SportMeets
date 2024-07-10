@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { beginAsyncEvent } from 'react-native/Libraries/Performance/Systrace';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { joinEvent } from '../api';
 export default function CreateEventScreen() {
   const [sportType, setSportType] = useState('');
   const [eventName, setEventName] = useState('');
@@ -64,9 +64,15 @@ export default function CreateEventScreen() {
       "event_organiser": user.username
   }
 
-    postEvent(testEvent).then((data) => {
+    postEvent(testEvent).then(({data}) => {
       setSomethingChanged(!somethingChanged)
+      const event = data["PostedEvent"]
+      return joinEvent({ "username": user["username"],
+        "event_id": event["event_id"]})
+    }).then((data)=> {
+      console.log(data)
       setCreatedEvent(true)
+
     })
   }
 

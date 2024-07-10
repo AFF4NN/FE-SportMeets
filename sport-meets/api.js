@@ -58,7 +58,7 @@ export function postEvent(newEvent) {
   return baseApi
     .post("/events", newEvent)
     .then((data) => {
-      return data;
+      return data
     })
     .catch((err) => {
       return err;
