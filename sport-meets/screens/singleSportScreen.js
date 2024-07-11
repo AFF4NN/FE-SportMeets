@@ -11,6 +11,38 @@ import { getUserEvents } from "../api";
 import { getUserEventsByID } from "../api";
 import { joinEvent } from "../api";
 
+
+  // it's on web!
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+
+
+import { Platform } from 'react-native';
+
+async function getCoordinates(locationName) {
+  const apiKey = 'AIzaSyDOTPhZLAqHzJly3y6h9vxC24c9P3yt17Q';
+  const encodedLocation = encodeURIComponent(locationName);
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedLocation}&key=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.results.length > 0) {
+      const { lat, lng } = data.results[0].geometry.location;
+      return { latitude: lat, longitude: lng };
+    } else {
+      throw new Error('Location not found');
+    }
+  } catch (error) {
+    console.error('Error fetching location coordinates:', error);
+    return null;
+  }
+}
+
+
 export default function SingleSportScreen({ navigation, route }) {
   const { event } = route.params;
 
@@ -18,6 +50,15 @@ export default function SingleSportScreen({ navigation, route }) {
     event.event_spaces_available
   );
 
+
+  // Create a custom icon
+const customIcon = L.icon({
+  iconUrl:"https://c8.alamy.com/comp/KTJE3A/doomsday-preppers-logo-KTJE3A.jpg",
+  iconSize: [80, 35], // Size of the icon
+  iconAnchor: [17, 35], // Point of the icon which will correspond to marker's location
+  popupAnchor: [0, -35] // Point from which the popup should open relative to the iconAnchor
+});
+  
   const { user, setUser } = useContext(UserContext);
 
   const [hasAlreadyJoined, sethasAlreadyJoined] = useState("");
@@ -25,6 +66,8 @@ export default function SingleSportScreen({ navigation, route }) {
   const [users, setUsers] = useState("");
 
   const [organiser, setOrganiser] = useState("");
+
+  const [locationCordinates, setLocationCordinates] = useState("")
 
   useEffect(() => {
     getUserEventsByID(event.event_id).then((user_events) => {
@@ -43,6 +86,10 @@ export default function SingleSportScreen({ navigation, route }) {
 
       setOrganiser(organiserlocal);
     });
+
+    getCoordinates(event.event_location).then((coordinates) => {
+      setLocationCordinates(coordinates)
+    })
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +139,14 @@ export default function SingleSportScreen({ navigation, route }) {
                 {event.event_organiser}
               </Text>
             </View>
+            { Platform.OS === 'web' ? locationCordinates ? <MapContainer center={[locationCordinates["latitude"], locationCordinates["longitude"]]} zoom={13} style={{ height: "10rem", width: "100%"}}>
+           <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://png.pngtree.com/template/20191009/ourmid/pngtree-colored-location-line-vector-single-icon-image_314830.jpg">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[locationCordinates["latitude"], locationCordinates["longitude"]]} icon={customIcon}/>
+             </MapContainer> : <View></View> : <View></View>
+             } 
             <Text style={styles.text}>
               <Text style={styles.bold}>Spaces Available: </Text>
               {spacesAvailable}
@@ -165,6 +220,15 @@ export default function SingleSportScreen({ navigation, route }) {
                 {event.event_organiser}
               </Text>
             </View>
+
+            { Platform.OS === 'web' ? locationCordinates ? <MapContainer center={[locationCordinates["latitude"], locationCordinates["longitude"]]} zoom={13} style={{ height: "10rem", width: "100%"}}>
+           <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://png.pngtree.com/template/20191009/ourmid/pngtree-colored-location-line-vector-single-icon-image_314830.jpg">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[locationCordinates["latitude"], locationCordinates["longitude"]]} icon={customIcon}/>
+             </MapContainer> : <View></View> : <View></View>
+             } 
             <Text style={styles.text}>
               <Text style={styles.bold}>Spaces Available: </Text>
               {spacesAvailable}
@@ -227,6 +291,14 @@ export default function SingleSportScreen({ navigation, route }) {
                 {event.event_organiser}
               </Text>
             </View>
+            { Platform.OS === 'web' ? locationCordinates ? <MapContainer center={[locationCordinates["latitude"], locationCordinates["longitude"]]} zoom={13} style={{ height: "10rem", width: "100%"}}>
+           <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://png.pngtree.com/template/20191009/ourmid/pngtree-colored-location-line-vector-single-icon-image_314830.jpg">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[locationCordinates["latitude"], locationCordinates["longitude"]]} icon={customIcon}/>
+             </MapContainer> : <View></View> : <View></View>
+             } 
             <Text style={styles.text}>
               <Text style={styles.bold}>Spaces Available: </Text>
               {spacesAvailable}
