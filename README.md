@@ -19,7 +19,7 @@ Dynamic Event Creation and Management
    username: Alex, password: teacher, OR  username: Mo, password: iPhone. Alternatively you can create an account.
 
 ##  API Integration
-The app communicates with a backend server via RESTful APIs built with Python (Flask/Django) hosted at https://be-sportmeets-py.onrender.com/api/sportmeets.
+The app communicates with a backend server via RESTful APIs built with Python (Flask) hosted at https://be-sportmeets-py.onrender.com/api/sportmeets.
 It handles all data manipulations for events, users, messages, and more.
 
 ## Real-Time Communication with Socket.IO
